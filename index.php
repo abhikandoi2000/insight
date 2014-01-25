@@ -53,7 +53,7 @@ $app->post('/members/update', function(Request $request) use($app) {
   return $result . " rows affected.";
 });
 
-$app->post('/commits/new', function(Request $request) use($app) {
+$app->post('/commits', function(Request $request) use($app) {
   $sql = "INSERT INTO `commits`(`hash`, `message`, `additions`, `deletions`, `files_affected`, `timestamp`, `member_id`, `project_id`) VALUES (:hash, :message, :additions, :deletions, :files_affected, :timestamp, :member_id, :project_id)";
   $result = $app['db']->executeUpdate($sql, array(
     ':hash' => $request->get('hash'),
@@ -66,7 +66,19 @@ $app->post('/commits/new', function(Request $request) use($app) {
     ':project_id' => $request->get('project_id'),
     )
   );
-  return $result . " rows affected.";
+  return 'Author: ' . $request->get('author');
+});
+
+$app->delete('/commits', function() use($app) {
+  $sql = "TRUNCATE `commits`";
+  $result = $app['db']->executeUpdate($sql);
+  return "{$result} rows affected.";
+});
+
+$app->delete('/commits/{project_id}', function($project_id) use($app) {
+  $sql = "DELETE FROM `commits` WHERE project_id = ?";
+  $result = $app['db']->executeUpdate($sql, array($project_id));
+  return "{$result} rows affected.";
 });
 
 $app->run();

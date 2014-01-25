@@ -1,8 +1,9 @@
 # php libraries
 vendor/
 
-# config file
+# config file(s)
 config/config.ini
+config/config.sh
 
 # cache directory for twig template engine
 cache/
