@@ -5,8 +5,12 @@ require_once __DIR__.'/vendor/autoload.php';
 // loads config file
 $config = parse_ini_file(__DIR__ . "/config/config.ini");
 
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 $app = new Silex\Application();
+
+$app['debug'] = true;
 
 // registers Twig for use as $app['twig']
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
@@ -27,7 +31,6 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
     ),
 ));
 
-
 /**
  * Landing Page
  */
@@ -35,11 +38,23 @@ $app->get('/', function() use($app) {
   return $app['twig']->render('home.html', array('name' => 'Insight'));
 });
 
-$app->get('/users/update', function() use($app) {
-  return 'Hello '.$app->escape($name);
+
+$app->post('/members/update', function(Request $request) use($app) {
+  $sql = "INSERT INTO `members`(`firstname`, `lastname`, `mail`, `github_id`, `year`, `group`) VALUES (:firstname, :lastname, :mail, :github_id, :year, :group)";
+  $result = $app['db']->executeUpdate($sql, array(
+    ':firstname' => $request->get('firstname'),
+    ':lastname' => $request->get('lastname'),
+    ':mail' => $request->get('mail'),
+    ':github_id' => $request->get('github_id'),
+    ':year' => $request->get('year'),
+    ':group' => $request->get('group'),
+    )
+  );
+  return $result . " rows affected.";
+  // return $request->get('name');
 });
 
-$app->get('/commits/update', function() use($app) {
+$app->post('/commits/update', function() use($app) {
   return 'Hello '.$app->escape($name);
 });
 
