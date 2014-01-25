@@ -51,11 +51,22 @@ $app->post('/members/update', function(Request $request) use($app) {
     )
   );
   return $result . " rows affected.";
-  // return $request->get('name');
 });
 
-$app->post('/commits/update', function() use($app) {
-  return 'Hello '.$app->escape($name);
+$app->post('/commits/new', function(Request $request) use($app) {
+  $sql = "INSERT INTO `commits`(`hash`, `message`, `additions`, `deletions`, `files_affected`, `timestamp`, `member_id`, `project_id`) VALUES (:hash, :message, :additions, :deletions, :files_affected, :timestamp, :member_id, :project_id)";
+  $result = $app['db']->executeUpdate($sql, array(
+    ':hash' => $request->get('hash'),
+    ':message' => $request->get('message'),
+    ':additions' => $request->get('additions'),
+    ':deletions' => $request->get('deletions'),
+    ':files_affected' => $request->get('files_affected'),
+    ':timestamp' => $request->get('timestamp'),
+    ':member_id' => $request->get('member_id'),
+    ':project_id' => $request->get('project_id'),
+    )
+  );
+  return $result . " rows affected.";
 });
 
 $app->run();
