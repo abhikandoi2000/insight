@@ -1,2 +1,5 @@
 # php libraries
 vendor/
+
+# config file
+config/config.ini
