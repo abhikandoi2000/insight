@@ -1,13 +1,10 @@
 <?php
 require_once __DIR__.'/vendor/autoload.php';
 
-/* Twig File loader and Environment */
-/*
-$loader = new Twig_Loader_Filesystem(__DIR__ . '/views');
-$twig = new Twig_Environment($loader, array(
-  'cache' => __DIR__ . '/cache',
-));
-*/
+
+// loads config file
+$config = parse_ini_file(__DIR__ . "/config/config.ini");
+
 
 $app = new Silex\Application();
 
@@ -16,11 +13,20 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => __DIR__ . '/views',
     'twig.options' => array(
       'cache' => __DIR__ . '/cache',
+      'debug' => true,
     )
 ));
 
-// loads config file
-$config = parse_ini_file(__DIR__ . "/config/config.ini");
+$app->register(new Silex\Provider\DoctrineServiceProvider(), array(
+    'db.options' => array(
+        'driver' => 'pdo_mysql',
+        'host' => $config['mysql_host'],
+        'user' => $config['mysql_user'],
+        'password' => $config['mysql_password'],
+        'dbname' => $config['mysql_database'],
+    ),
+));
+
 
 /**
  * Landing Page
