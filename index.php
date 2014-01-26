@@ -54,7 +54,7 @@ $app->post('/members/update', function(Request $request) use($app) {
 });
 
 $app->post('/commits', function(Request $request) use($app) {
-  $sql = "INSERT INTO `commits`(`hash`, `message`, `additions`, `deletions`, `files_affected`, `timestamp`, `member_id`, `project_id`) VALUES (:hash, :message, :additions, :deletions, :files_affected, :timestamp, :member_id, :project_id)";
+  $sql = "INSERT INTO `commits`(`hash`, `message`, `additions`, `deletions`, `files_affected`, `timestamp`, `author`, `identifier`) VALUES (:hash, :message, :additions, :deletions, :files_affected, :timestamp, :author, :identifier)";
   $result = $app['db']->executeUpdate($sql, array(
     ':hash' => $request->get('hash'),
     ':message' => $request->get('message'),
@@ -62,8 +62,8 @@ $app->post('/commits', function(Request $request) use($app) {
     ':deletions' => $request->get('deletions'),
     ':files_affected' => $request->get('files_affected'),
     ':timestamp' => $request->get('timestamp'),
-    ':member_id' => $request->get('member_id'),
-    ':project_id' => $request->get('project_id'),
+    ':author' => $request->get('author'),
+    ':identifier' => $request->get('identifier'),
     )
   );
   return 'Author: ' . $request->get('author');
@@ -75,9 +75,9 @@ $app->delete('/commits', function() use($app) {
   return "{$result} rows affected.";
 });
 
-$app->delete('/commits/{project_id}', function($project_id) use($app) {
-  $sql = "DELETE FROM `commits` WHERE project_id = ?";
-  $result = $app['db']->executeUpdate($sql, array($project_id));
+$app->delete('/commits/{identifier}', function($identifier) use($app) {
+  $sql = "DELETE FROM `commits` WHERE identifier = ?";
+  $result = $app['db']->executeUpdate($sql, array($identifier));
   return "{$result} rows affected.";
 });
 

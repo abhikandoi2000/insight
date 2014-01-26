@@ -21,7 +21,9 @@ git log --format=tformat:"%H%n" | egrep  --color=never -o  "[a-f0-9]{40}" | whil
   deletions=`git log --shortstat --format=format:"" -n 1 $hash | egrep --color=never -o "\), [0-9][0-9]* deletions"`
   files_affected=`git log --shortstat --format=format:"" -n 1 $hash | egrep --color=never -o "[0-9][0-9]* file"`
   author=`git log --format=tformat:"%ae" -n 1 $hash`
+  timestamp=`git log --format=format:"%ct" -n 1 $hash`
   files_affected=${files_affected::-5}
+  identifier=${PWD##*/}
   if [[ -z "$additions" ]]; then
     additions="0"
   else
@@ -38,5 +40,7 @@ git log --format=tformat:"%H%n" | egrep  --color=never -o  "[a-f0-9]{40}" | whil
   echo $deletions
   echo $files_affected
   echo $author
-  curl -X POST -d "hash=$hash" -d "message=$message" -d "timestamp=13542500&author=$author&additions=$additions&deletions=$deletions&files_affected=$files_affected&member_id=1&project_id=1" $URL_ROOT
+  echo $identifier
+  echo $timestamp
+  curl -X POST -d "hash=$hash" -d "message=$message" -d "timestamp=$timestamp&author=$author&additions=$additions&deletions=$deletions&files_affected=$files_affected&identifier=$identifier" $URL_ROOT
 done

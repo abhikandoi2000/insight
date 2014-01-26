@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jan 26, 2014 at 03:33 AM
+-- Generation Time: Jan 26, 2014 at 06:15 AM
 -- Server version: 5.5.34-0ubuntu0.12.04.1
 -- PHP Version: 5.3.10-1ubuntu3.9
 
@@ -33,8 +33,8 @@ CREATE TABLE IF NOT EXISTS `commits` (
   `deletions` int(10) NOT NULL,
   `files_affected` int(6) NOT NULL,
   `timestamp` varchar(15) NOT NULL,
-  `member_id` int(10) NOT NULL,
-  `project_id` int(10) NOT NULL,
+  `author` varchar(256) NOT NULL,
+  `identifier` varchar(20) NOT NULL,
   UNIQUE KEY `id` (`hash`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Commit Details';
 
@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS `members` (
   `group` varchar(10) NOT NULL,
   UNIQUE KEY `id` (`id`),
   UNIQUE KEY `mail` (`mail`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Member details' AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='Member details' AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
