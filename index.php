@@ -36,12 +36,14 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
  */
 $app->get('/', function() use($app) {
   $now = time();
-  $yesterday = $now - (4 * 7 * 24 * 60 * 60);
-  $sql = "SELECT count(*) as commit_count, `author` FROM `commits` WHERE `timestamp` BETWEEN :yesterday AND :now GROUP BY `author` ORDER BY commit_count DESC LIMIT 10";
+  $yesterday = $now - (2 * 12 * 4 * 7 * 24 * 60 * 60);
+  $sql = "SELECT count(*) as commit_count, `author` FROM `commits` WHERE `timestamp` BETWEEN :yesterday AND :now GROUP BY `author` ORDER BY commit_count DESC LIMIT 6";
   $data = array();
   $commit_data = $app['db']->fetchAll($sql, array(':yesterday' => $yesterday, ':now' => $now));
   foreach( $commit_data as $key => $author ) {
-    array_push($data, array('author' => $author['author'], 'commits' => $author['commit_count']));
+    $query = "SELECT `firstname`, `lastname` FROM members WHERE mail = ?";
+    $member = $app['db']->fetchAssoc($query, array($author['author']));
+    array_push($data, array('name' => $member['firstname'] . " " .  $member['lastname'], 'commits' => $author['commit_count']));
   }
 
   $sql2 = "SELECT count(*) as commit_count, `identifier` FROM `commits` WHERE `timestamp` BETWEEN :yesterday AND :now GROUP BY `identifier` ORDER BY commit_count DESC LIMIT 10";
@@ -53,6 +55,32 @@ $app->get('/', function() use($app) {
   }
 
   return $app['twig']->render('home.html', array('top_authors' => $data, 'top_projects' => $data2));
+});
+
+$app->get('/projects', function() use($app) {
+  $sql = "SELECT count(*) as commit_count, `identifier` FROM `commits` GROUP BY `identifier`";
+  $project_data = $app['db']->fetchAll($sql);
+  $data = array();
+
+  foreach( $project_data as $key => $project ) {
+    array_push($data, array('identifier' => $project['identifier'], 'commits' => $project['commit_count']));
+  }
+
+  return $app['twig']->render('projects.html', array('projects_data' => $data));
+});
+
+$app->get('/members', function() use($app) {
+  $sql = "SELECT count(*) as commit_count, `author` FROM `commits` GROUP BY `author` ORDER BY `commit_count` DESC";
+  $authors_data = $app['db']->fetchAll($sql);
+  $data = array();
+
+  foreach( $authors_data as $key => $author ) {
+    $query = "SELECT `firstname`, `lastname` FROM members WHERE mail = ?";
+    $member = $app['db']->fetchAssoc( $query, array($author['author']) );
+    array_push($data, array('name' => $member['firstname'] . " " . $member['lastname'], 'commits' => $author['commit_count']));
+  }
+
+  return $app['twig']->render('members.html', array('members_data' => $data));
 });
 
 $app->post('/projects/reload', function() use($app, $config) {
@@ -109,8 +137,14 @@ $app->delete('/commits/{identifier}', function($identifier) use($app) {
   return "{$result} rows affected.";
 });
 
+$app->delete('/members', function() use($app) {
+  $sql = "TRUNCATE `members`";
+  $result = $app['db']->executeUpdate($sql);
+  return "{$result} rows affected.";
+});
+
 $app->post('/members/reload', function() use($app, $config) {
-  $url = $config['base_url'] . "users.json";
+  $url = $config['base_url'] . "users.json?limit=100&key=" . $config['api_key'];
   $response = Requests::get($url, array( "Accept" => "application/json" ),
     array(
       "key" => $config['api_key']

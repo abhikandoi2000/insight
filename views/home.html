@@ -2,19 +2,19 @@
 
 {% block content %}
   <div class="pure-g-r">
-    <div class="pure-u-1-4 top">
+    <div class="pure-u-1-5 top">
       <div id="top-contributors" class="top-tile">
         <ul>
           <li class="tile-title">Top Contributors</li>
           {% for author in top_authors %}
-            <li>{{ author.author }}</li>
+            <li>{{ author.name }}</li>
           {% else %}
             <li>No Activity today.</li>
           {% endfor %}
         </ul>
       </div>
     </div>
-    <div class="pure-u-3-4 top">
+    <div class="pure-u-4-5 top">
       <div id="top-contributed" class="top-tile">
         <ul>
           <li class="tile-title">Top Contributed Projects</li>
@@ -27,4 +27,40 @@
       </div>
     </div>
   </div>
+  <div class="pure-g-r">
+    <canvas id="myChart" width="1000px" height="300px"></canvas>
+  </div>
+{% endblock %}
+
+
+{% block scripts %}
+  <script src="/assets/js/Chart.min.js"></script>
+  <script>
+    //Get the context of the canvas element we want to select
+    ctx = document.getElementById("myChart").getContext("2d");
+    var data = {
+      labels : [
+      "Jan 20","Jan 21","Jan 22","Jan 23","Jan 24","Jan 25","Jan 26"
+      ],
+      datasets : [
+        {
+          fillColor : "rgba(240,86,89,0.8)",
+          strokeColor : "rgba(220,220,220,1)",
+          pointColor : "rgba(220,220,220,1)",
+          pointStrokeColor : "#fff",
+          data : [
+          65,59,90,81,56,55,40
+          ]
+        },
+        {
+          fillColor : "rgba(120,195,207,0.8)",
+          strokeColor : "rgba(151,187,205,1)",
+          pointColor : "rgba(151,187,205,1)",
+          pointStrokeColor : "#fff",
+          data : [28,48,40,19,96,27,100]
+        }
+      ]
+    };
+    new Chart(ctx).Line(data);
+  </script>
 {% endblock %}
