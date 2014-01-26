@@ -2,6 +2,7 @@
   "require": {
     "silex/silex": ">=1.1.2",
     "twig/twig": ">=1.15.0",
-    "doctrine/dbal": "2.2.*"
+    "doctrine/dbal": "2.2.*",
+    "rmccue/requests": ">=1.0"
   }
 }

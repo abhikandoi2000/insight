@@ -6,7 +6,7 @@
 ## and posts data using the `/commits/new` endpoint
 
 # load config variables
-. ../config/config.sh
+. ../config/config.cfg
 
 echo $URL_ROOT
 

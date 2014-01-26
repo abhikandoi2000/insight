@@ -81,5 +81,35 @@ $app->delete('/commits/{project_id}', function($project_id) use($app) {
   return "{$result} rows affected.";
 });
 
+$app->post('/members/reload', function() use($app, $config) {
+  $url = $config['base_url'] . "users.json?key=" . $config['api_key'];
+  $response = Requests::get($url, array( "Accept" => "application/json" ),
+    array(
+      "key" => $config['api_key']
+    )
+  );
+
+  $response = json_decode($response->body);
+
+  foreach ($response->users as $index => $user) {
+    $sql = "INSERT INTO `members`(`firstname`, `lastname`, `mail`, `github_id`, `birthday`, `year`, `since`, `group`) VALUES (:firstname, :lastname, :mail, :github_id, :birthday, :year, :since, :group)";
+    $since = str_replace("Z", "", str_replace("T", " ", $user->created_on));
+    // TODO(abhikandoi2000@gmail.com): update group for member
+    $result = $app['db']->executeUpdate($sql, array(
+        ':firstname' => $user->firstname,
+        ':lastname' => $user->lastname,
+        ':mail' => $user->mail,
+        ':github_id' => $user->custom_fields[3]->value | "",
+        ':birthday' => $user->custom_fields[4]->value | "",
+        ':year' => $user->custom_fields[1]->value | "1",
+        ':since' => $since,
+        ':group' => "developer"
+      )
+    );
+  }
+
+  return 'Check db';
+});
+
 $app->run();
 ?>

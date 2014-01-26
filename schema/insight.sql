@@ -67,8 +67,7 @@ CREATE TABLE IF NOT EXISTS `members` (
   `since` datetime NOT NULL,
   `group` varchar(10) NOT NULL,
   UNIQUE KEY `id` (`id`),
-  UNIQUE KEY `mail` (`mail`),
-  UNIQUE KEY `github_id` (`github_id`)
+  UNIQUE KEY `mail` (`mail`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Member details' AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
