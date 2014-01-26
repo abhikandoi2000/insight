@@ -2,9 +2,12 @@ body {
   background: #f5f5f5;
 }
 
+#layout {
+  height: 100%;
+}
+
 #nav {
-  width: 16%;
-  height: 800px;
+  width: 220px;
   overflow: auto;
   text-align: center;
   background: #323845;
@@ -20,6 +23,44 @@ body {
   background: #a28cd4;
 }
 
+#profile .content-wrap {
+  vertical-align: middle;
+  margin: 1.5em 1em;
+}
+
+#userinfo {
+  text-align: left;
+  padding-left: 10px;
+  padding-top: 8px;
+  font-family: Nunito, Arial;
+  font-weight: 300;
+}
+
+.profilepic {
+  width: 45px;
+  height: 45px;
+  overflow: hidden;
+  border-radius: 50%;
+  background-size: cover;
+}
+
+#userinfo .group {
+  text-transform: uppercase;
+  font-size: 0.6em;
+  color: #e5e5e5;
+}
+
+#userinfo .username {
+  color: #fff;
+  font-size: 0.9em;
+  text-shadow: 0 1px 3px rgba(15,15,15,0.1) ;
+}
+
+#userinfo .lastname {
+  font-weight: 700;
+  zoom: 1;
+}
+
 #nav .pure-menu.pure-menu-open {
   background: transparent;
   border: none;
@@ -28,6 +69,7 @@ body {
 }
 
 #nav .pure-menu a {
+  text-transform: uppercase;
   color: #fff;
   margin: 0.2em 0;
   line-height: 2.5em;
@@ -38,14 +80,15 @@ body {
 }
 
 #heading, #profile {
-  height: 100px;
+  height: 6em;
   box-shadow: 0 3px 6px -6px rgba(15,15,15,0.5);
   vertical-align: middle;
 }
 
 #heading {
   background: #fff;
-  font-family: Alef, Arial;
+  color: #333;
+  font-family: Nunito, Arial;
 }
 
 #pagetitle {
@@ -57,7 +100,7 @@ body {
 }
 
 #main {
-  width: 84%;
+  /*width: 84%;*/
 }
 
 .content-body {
@@ -77,18 +120,23 @@ body {
 .top-tile ul {
   display: inline-block;
   margin: 1.2em auto;
-  width: 90%;
+  width: 95%;
   padding: 0;
   list-style: none;
   font-size: 1.1em;
 }
 
 .top-tile ul li.tile-title {
-  font-family: Alef;
-  font-size: 1.2em;
-  padding-bottom: 0.6em;
-  margin-bottom: 0.5em;
-  border-bottom: 2px solid #ccc;
+  text-transform: uppercase;
+  text-align: left;
+  color: #aaa;
+  font-family: Nunito;
+  font-size: 1em;
+  margin-left: 0.8em;
+  margin-right: 0.4em;
+  padding-bottom: 0.2em;
+  margin-bottom: 0.4em;
+  border-bottom: 2px solid #e5e5e5;
 }
 
 .top-tile ul li {

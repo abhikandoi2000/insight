@@ -5,7 +5,7 @@
     <div class="pure-u-1-4 top">
       <div id="top-contributors" class="top-tile">
         <ul>
-          <li class="tile-title">Top Contributors</li>
+          <li class="tile-title">Contributors</li>
           {% for author in top_authors %}
             <li>{{ author.name }}</li>
           {% else %}
@@ -17,7 +17,7 @@
     <div class="pure-u-3-4 top">
       <div id="top-contributed" class="top-tile">
         <ul>
-          <li class="tile-title">Top Contributed Projects</li>
+          <li class="tile-title">Popular Projects</li>
           {% for project in top_projects %}
             <li>{{ project.identifier|title }}</li>
           {% else %}
