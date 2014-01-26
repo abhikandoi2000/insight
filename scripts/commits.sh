@@ -11,7 +11,7 @@
 echo $URL_ROOT
 
 # TODO: do this for all repos
-# cd /home/abhi/projects/insight
+# cd $1
 
 git log --format=tformat:"%H%n" | egrep  --color=never -o  "[a-f0-9]{40}" | while read hash; do
   echo "$hash"
@@ -22,7 +22,6 @@ git log --format=tformat:"%H%n" | egrep  --color=never -o  "[a-f0-9]{40}" | whil
   files_affected=`git log --shortstat --format=format:"" -n 1 $hash | egrep --color=never -o "[0-9][0-9]* file"`
   author=`git log --format=tformat:"%ae" -n 1 $hash`
   timestamp=`git log --format=format:"%ct" -n 1 $hash`
-  files_affected=${files_affected::-5}
   identifier=${PWD##*/}
   if [[ -z "$additions" ]]; then
     additions="0"
@@ -35,6 +34,11 @@ git log --format=tformat:"%H%n" | egrep  --color=never -o  "[a-f0-9]{40}" | whil
   else
     deletions=${deletions:3}
     deletions=${deletions::-10}
+  fi
+  if [[ -z "$files_affected" ]]; then
+    files_affected="0"
+  else
+    files_affected=${files_affected::-5}
   fi
   echo $additions
   echo $deletions
