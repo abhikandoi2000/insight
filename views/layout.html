@@ -5,11 +5,39 @@
   <meta type="name" description="Insight">
   <meta type="description" description="Redmine and git based statistics">
   <title>Insight | SDSLabs</title>
+  <link rel="stylesheet" href="/assets/css/pure.min.css">
+  <link rel="stylesheet" href="/assets/css/main.css">
   {% block head %}
   {% endblock %}
 </head>
 <body>
-  {% block body %}
-  {% endblock %}
+  <div id="layout" class="content pure-g">
+    <div id="nav" class="pure-u">
+      <div class="nav-inner">
+        <div class="pure-g profile-wrapper">
+          <div id="profile" class="pure-u-1"></div>
+        </div>
+        <div class="pure-menu pure-menu-open">
+          <ul>
+            <li><a href="/projects">Projects</a></li>
+            <li><a href="/members">Members</a></li>
+            <li><a href="/members">Deployment</a></li>
+            <li><a href="/members">Issues</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div id="main" class="pure-u">
+    <div class="main-content">
+      <div id="heading" class="menu">
+        <div id="pagetitle">Welcome</div>
+      </div>
+      <div class="content-body">
+      {% block content %}
+      {% endblock %}
+      </div>
+    </div>
+    </div>
+  </div>
 </body>
 </html>

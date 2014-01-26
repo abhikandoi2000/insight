@@ -1,11 +1,30 @@
 {% extends "layout.html" %}
 
-{% block body %}
-  <div class="main-wrapper">
-    <header></header>
-    <div class="content-wrapper">
-      <div class="menu"></div>
-      <div class="content-body"></div>
+{% block content %}
+  <div class="pure-g-r">
+    <div class="pure-u-1-4 top">
+      <div id="top-contributors" class="top-tile">
+        <ul>
+          <li class="tile-title">Top Contributors</li>
+          {% for author in top_authors %}
+            <li>{{ author.author }}</li>
+          {% else %}
+            <li>No Activity today.</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+    <div class="pure-u-3-4 top">
+      <div id="top-contributed" class="top-tile">
+        <ul>
+          <li class="tile-title">Top Contributed Projects</li>
+          {% for project in top_projects %}
+            <li>{{ project.identifier|title }}</li>
+          {% else %}
+            <li>No Activity today.</li>
+          {% endfor %}
+        </ul>
+      </div>
     </div>
   </div>
 {% endblock %}
