@@ -1,0 +1,35 @@
+<VirtualHost *:80>
+  ServerName insight.localhost
+  ServerAdmin abhikandoi2000@gmail.com
+  # Replace <user> with your username
+  # Also make sure the path corresponds to the insight folder on your system
+  #
+  # Eg: for abhi it becomes
+  # DocumentRoot /home/abhi/projects/insight
+  DocumentRoot /home/abhi/projects/insight
+  <Directory /home/abhi/projects/insight>
+    #Do not show indexes
+    #Do not follow symlinks
+    Options -Indexes -MultiViews
+    AllowOverride All
+    Order allow,deny
+    allow from all
+    <IfModule mod_rewrite.c>
+
+      RewriteEngine On
+      #RewriteBase /home/abhi/projects/insight
+      RewriteCond %{REQUEST_FILENAME} !-f
+      RewriteRule ^ index.php [QSA,L]
+
+      RewriteCond %{DOCUMENT_ROOT}/assets/$1 -f
+      RewriteRule ^(.+?)/?$ /assets/$1 [L]
+    </IfModule>
+
+</Directory>
+ErrorLog /var/log/apache2/insight.error.log
+
+# Possible values include: debug, info, notice, warn, error, crit,
+# alert, emerg.
+LogLevel debug
+CustomLog /var/log/apache2/insight.access.log combined
+</VirtualHost>
