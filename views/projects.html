@@ -1,0 +1,63 @@
+{% extends "layout.html" %}
+
+{% block content %}
+  <div class="pure-g-r">
+    <div class="pure-u-1-5 top">
+      <div id="top-contributors" class="top-tile">
+        <ul>
+          <li class="tile-title">Top Contributors</li>
+          <li>Sample</li>
+          <li>Sample</li>
+          <li>Sample</li>
+          <li>Sample</li>
+          <li>Sample</li>
+        </ul>
+      </div>
+    </div>
+    <div class="pure-u-4-5 top">
+      <div id="top-contributed" class="top-tile">
+        <ul>
+          <li class="tile-title">Top Contributed Projects</li>
+          <li>Sample Project</li>
+          <li>Sample Project</li>
+          <li>Sample Project</li>
+          <li>Sample Project</li>
+          <li>Sample Project</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="pure-g-r">
+    <canvas id="myChart" width="1000px" height="300px"></canvas>
+  </div>
+{% endblock %}
+
+
+{% block scripts %}
+  <script src="/assets/js/Chart.min.js"></script>
+  <script>
+    //Get the context of the canvas element we want to select
+    ctx = document.getElementById("myChart").getContext("2d");
+    var data = {
+      labels : [
+      {% for project in projects_data %}
+      "{{ project.identifier }}",
+      {% endfor %}
+      ],
+      datasets : [
+        {
+          fillColor : "rgba(240,86,89,0.8)",
+          strokeColor : "rgba(220,220,220,1)",
+          pointColor : "rgba(220,220,220,1)",
+          pointStrokeColor : "#fff",
+          data : [
+          {% for project in projects_data %}
+            {{ project.commits }},
+          {% endfor %}
+          ]
+        }
+      ]
+    };
+    new Chart(ctx).Line(data);
+  </script>
+{% endblock %}
