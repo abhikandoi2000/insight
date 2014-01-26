@@ -2,8 +2,7 @@
 vendor/
 
 # config file(s)
-config/config.ini
-config/config.sh
+config/config.*
 
 # cache directory for twig template engine
 cache/
