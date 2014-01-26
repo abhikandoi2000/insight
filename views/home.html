@@ -34,10 +34,9 @@
 
 
 {% block scripts %}
-  <script src="/assets/js/Chart.min.js"></script>
   <script>
     //Get the context of the canvas element we want to select
-    ctx = document.getElementById("myChart").getContext("2d");
+    var ctx = document.getElementById("myChart").getContext("2d");
     var data = {
       labels : [
       "Jan 20","Jan 21","Jan 22","Jan 23","Jan 24","Jan 25","Jan 26"
@@ -61,6 +60,14 @@
         }
       ]
     };
-    new Chart(ctx).Line(data);
+    new Chart(ctx).Line(data, {
+      scaleShowGridLines : false,
+      scaleFontFamily : "'Nunito'",
+      scaleFontSize : 15,
+      //String - Scale label font weight style
+      scaleFontStyle : "300",
+      //String - Scale label font colour
+      scaleFontColor : "#666"
+    });
   </script>
 {% endblock %}

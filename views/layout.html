@@ -37,6 +37,14 @@
             <li><a href="/members">Deployment</a></li>
             <li><a href="/members">Issues</a></li>
           </ul>
+          <div class="projectchart">
+            <div class="chart-title">Progress Today</div>
+            <canvas id="projectChart" width="150px" height="150px"></canvas>
+            <div class="compare-data">
+              <div class="percentage">72%</div>
+              <div class="text">compared to yesterday</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -52,6 +60,36 @@
     </div>
     </div>
   </div>
+  <script src="/assets/js/Chart.min.js"></script>
+  <script>
+    //Get the context of the canvas element we want to select
+    var prjCtx = document.getElementById("projectChart").getContext("2d");
+    var prjData = [
+      {
+        value: 72,
+        color:"#56afbf"
+      },
+      {
+        value : 28,
+        color : "#f2575c"
+      }
+    ];
+    var prjOptions = {
+      //Boolean - Whether we should show a stroke on each segment
+      segmentShowStroke : false,
+      
+      //String - The colour of each segment stroke
+      segmentStrokeColor : "rgba(0,0,0,0)",
+      
+      //Number - The width of each segment stroke
+      segmentStrokeWidth : 2,
+      
+      //The percentage of the chart that we cut out of the middle.
+      percentageInnerCutout : 75,
+      
+    };
+    new Chart(prjCtx).Doughnut(prjData, prjOptions);
+  </script>
   {% block scripts %}
   {% endblock %}
 </body>
