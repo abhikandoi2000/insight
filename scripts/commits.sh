@@ -11,7 +11,7 @@
 echo $URL_ROOT
 
 # TODO: do this for all repos
-# cd $1
+cd $1
 
 git log --format=tformat:"%H%n" | egrep  --color=never -o  "[a-f0-9]{40}" | while read hash; do
   echo "$hash"

@@ -36,7 +36,7 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
  */
 $app->get('/', function() use($app) {
   $now = time();
-  $yesterday = $now - (2 * 12 * 4 * 7 * 24 * 60 * 60);
+  $yesterday = $now - (4 * 7 * 24 * 60 * 60);
   $sql = "SELECT count(*) as commit_count, `author` FROM `commits` WHERE `timestamp` BETWEEN :yesterday AND :now GROUP BY `author` ORDER BY commit_count DESC LIMIT 6";
   $data = array();
   $commit_data = $app['db']->fetchAll($sql, array(':yesterday' => $yesterday, ':now' => $now));
@@ -46,7 +46,7 @@ $app->get('/', function() use($app) {
     array_push($data, array('name' => $member['firstname'] . " " .  $member['lastname'], 'commits' => $author['commit_count']));
   }
 
-  $sql2 = "SELECT count(*) as commit_count, `identifier` FROM `commits` WHERE `timestamp` BETWEEN :yesterday AND :now GROUP BY `identifier` ORDER BY commit_count DESC LIMIT 10";
+  $sql2 = "SELECT count(*) as commit_count, `identifier` FROM `commits` WHERE `timestamp` BETWEEN :yesterday AND :now GROUP BY `identifier` ORDER BY commit_count DESC LIMIT 6";
   $data2 = array();
   $project_data = $app['db']->fetchAll($sql2, array(':yesterday' => $yesterday, ':now' => $now));
 
