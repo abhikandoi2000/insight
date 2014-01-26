@@ -1,0 +1,96 @@
+body {
+  background: #f5f5f5;
+}
+
+#nav {
+  width: 20%;
+  height: 800px;
+  overflow: auto;
+  text-align: center;
+  background: #323845;
+  box-shadow: inset -5px 0 7px rgba(0,0,0,0.1);
+}
+
+.nav-inner {
+  display: block;
+  padding: 0 0 3em 0;
+}
+
+#profile {
+  background: #a28cd4;
+}
+
+#nav .pure-menu.pure-menu-open {
+  background: transparent;
+  border: none;
+  text-align: left;
+  margin-top: 2em;
+}
+
+#nav .pure-menu a {
+  color: #fff;
+  margin: 0.2em 0;
+  line-height: 2.5em;
+}
+
+#nav .pure-menu a:hover {
+  background: rgba(100,100,100,0.1);
+}
+
+#heading, #profile {
+  height: 110px;
+  box-shadow: 0 3px 6px -6px rgba(15,15,15,0.5);
+  vertical-align: middle;
+}
+
+#heading {
+  background: #fff;
+}
+
+#pagetitle {
+  display: inline-block;
+  font-size: 2em;
+  line-height: 1.5em;
+  margin-top: 1em;
+  padding-left: 1.5em;
+}
+
+#main {
+  width: 80%;
+}
+
+.content-body {
+  padding: 2em 2em;
+}
+
+.top-tile {
+  height: 300px;
+  margin: 1em 1em;
+  background: #fff;
+  box-shadow: 0 0 4px 1px rgba(180,180,180,0.2);
+  text-align: center;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.top-tile ul {
+  display: inline-block;
+  margin: 1.2em auto;
+  width: 90%;
+  padding: 0;
+  list-style: none;
+  font-size: 1.1em;
+}
+
+.top-tile ul li.tile-title {
+  font-size: 1.2em;
+  padding-bottom: 0.6em;
+  margin-bottom: 0.5em;
+  border-bottom: 2px solid #ccc;
+}
+
+.top-tile ul li {
+  font-size: 0.8em;
+  padding-bottom: 0.2em;
+  margin-bottom: 0.2em;
+}

@@ -35,22 +35,50 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
  * Landing Page
  */
 $app->get('/', function() use($app) {
-  return $app['twig']->render('home.html', array('name' => 'Insight'));
+  $now = time();
+  $yesterday = $now - (4 * 7 * 24 * 60 * 60);
+  $sql = "SELECT count(*) as commit_count, `author` FROM `commits` WHERE `timestamp` BETWEEN :yesterday AND :now GROUP BY `author` ORDER BY commit_count DESC LIMIT 10";
+  $data = array();
+  $commit_data = $app['db']->fetchAll($sql, array(':yesterday' => $yesterday, ':now' => $now));
+  foreach( $commit_data as $key => $author ) {
+    array_push($data, array('author' => $author['author'], 'commits' => $author['commit_count']));
+  }
+
+  $sql2 = "SELECT count(*) as commit_count, `identifier` FROM `commits` WHERE `timestamp` BETWEEN :yesterday AND :now GROUP BY `identifier` ORDER BY commit_count DESC LIMIT 10";
+  $data2 = array();
+  $project_data = $app['db']->fetchAll($sql2, array(':yesterday' => $yesterday, ':now' => $now));
+
+  foreach( $project_data as $key => $project ) {
+    array_push($data2, array('identifier' => $project['identifier'], 'commits' => $project['commit_count']));
+  }
+
+  return $app['twig']->render('home.html', array('top_authors' => $data, 'top_projects' => $data2));
 });
 
-
-$app->post('/members/update', function(Request $request) use($app) {
-  $sql = "INSERT INTO `members`(`firstname`, `lastname`, `mail`, `github_id`, `year`, `group`) VALUES (:firstname, :lastname, :mail, :github_id, :year, :group)";
-  $result = $app['db']->executeUpdate($sql, array(
-    ':firstname' => $request->get('firstname'),
-    ':lastname' => $request->get('lastname'),
-    ':mail' => $request->get('mail'),
-    ':github_id' => $request->get('github_id'),
-    ':year' => $request->get('year'),
-    ':group' => $request->get('group'),
+$app->post('/projects/reload', function() use($app, $config) {
+  // TODO(abhikandoi2000@gmail.com): change code for all repositories
+  $url = $config['base_url'] . "projects.json?limit=100&key=" . $config['api_key'];
+  $response = Requests::get($url, array( "Accept" => "application/json" ),
+    array(
+      "key" => $config['api_key'],
+      "limit" => 100
     )
   );
-  return $result . " rows affected.";
+
+  $response = json_decode($response->body);
+
+  foreach ($response->projects as $project) {
+    $sql = "INSERT INTO `projects`(`name`, `description`, `homepage`, `identifier`) VALUES (:name, :description, :homepage, :identifier)";
+    $result = $app['db']->executeUpdate($sql, array(
+        ':name' => $project->name,
+        ':description' => $project->description,
+        ':homepage' => $project->homepage | "",
+        ':identifier' => $project->identifier
+      )
+    );
+  }
+
+  return 'Check db for projects';
 });
 
 $app->post('/commits', function(Request $request) use($app) {
@@ -82,7 +110,7 @@ $app->delete('/commits/{identifier}', function($identifier) use($app) {
 });
 
 $app->post('/members/reload', function() use($app, $config) {
-  $url = $config['base_url'] . "users.json?key=" . $config['api_key'];
+  $url = $config['base_url'] . "users.json";
   $response = Requests::get($url, array( "Accept" => "application/json" ),
     array(
       "key" => $config['api_key']
