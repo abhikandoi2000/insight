@@ -68,18 +68,25 @@ body {
   margin-top: 2em;
 }
 
+#nav .pure-menu.pure-menu-open a .fa {
+  margin-left: 0.5em;
+  margin-right: 1.5em;
+}
+
 #nav .pure-menu a {
   font-family: Nunito, Arial;
-  font-size: 0.7em;
+  font-size: 0.8em;
   text-transform: uppercase;
   color: #979ba1;
   margin: 0.2em 0;
   line-height: 2.8em;
   text-shadow: 0 1px 2px rgba(17,17,17,0.1);
+  transition: color 0.2s ease;
 }
 
 #nav .pure-menu a:hover {
   background: rgba(15,15,15,0.2);
+  color: #fff;
 }
 
 #nav .projectchart {
