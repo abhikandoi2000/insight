@@ -36,25 +36,29 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
  */
 $app->get('/', function() use($app) {
   $now = time();
-  $yesterday = $now - (4 * 7 * 24 * 60 * 60);
-  $sql = "SELECT count(*) as commit_count, `author` FROM `commits` WHERE `timestamp` BETWEEN :yesterday AND :now GROUP BY `author` ORDER BY commit_count DESC LIMIT 5";
-  $data = array();
-  $commit_data = $app['db']->fetchAll($sql, array(':yesterday' => $yesterday, ':now' => $now));
+  $past = $now - (4 * 7 * 24 * 60 * 60);
+
+  // top authors by commits
+  $top_authors_sql = "SELECT count(*) as commit_count, `author` FROM `commits` WHERE `timestamp` BETWEEN :past AND :now GROUP BY `author` ORDER BY commit_count DESC LIMIT 5";
+  $top_authors = array();
+  $commit_data = $app['db']->fetchAll($top_authors_sql, array(':past' => $past, ':now' => $now));
+
   foreach( $commit_data as $key => $author ) {
-    $query = "SELECT `firstname`, `lastname` FROM members WHERE mail = ?";
-    $member = $app['db']->fetchAssoc($query, array($author['author']));
-    array_push($data, array('name' => $member['firstname'] . " " .  $member['lastname'], 'commits' => $author['commit_count']));
+    $member_sql = "SELECT `firstname`, `lastname` FROM members WHERE mail = ?";
+    $member = $app['db']->fetchAssoc($member_sql, array($author['author']));
+    array_push($top_authors, array('name' => $member['firstname'] . " " .  $member['lastname'], 'commits' => $author['commit_count']));
   }
 
-  $sql2 = "SELECT count(*) as commit_count, `identifier` FROM `commits` WHERE `timestamp` BETWEEN :yesterday AND :now GROUP BY `identifier` ORDER BY commit_count DESC LIMIT 5";
-  $data2 = array();
-  $project_data = $app['db']->fetchAll($sql2, array(':yesterday' => $yesterday, ':now' => $now));
+  // top projects by commits
+  $top_projects_sql = "SELECT count(*) as commit_count, `identifier` FROM `commits` WHERE `timestamp` BETWEEN :past AND :now GROUP BY `identifier` ORDER BY commit_count DESC LIMIT 5";
+  $top_projects = array();
+  $project_data = $app['db']->fetchAll($top_projects_sql, array(':past' => $past, ':now' => $now));
 
   foreach( $project_data as $key => $project ) {
-    array_push($data2, array('identifier' => $project['identifier'], 'commits' => $project['commit_count']));
+    array_push($top_projects, array('identifier' => $project['identifier'], 'commits' => $project['commit_count']));
   }
 
-  return $app['twig']->render('home.html', array('top_authors' => $data, 'top_projects' => $data2));
+  return $app['twig']->render('home.html', array('top_authors' => $top_authors, 'top_projects' => $top_projects));
 });
 
 $app->get('/projects', function() use($app) {
