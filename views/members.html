@@ -58,6 +58,8 @@
         }
       ]
     };
-    new Chart(ctx).Line(data);
+    new Chart(ctx).Line(data, {
+      bezierCurve : false
+    });
   </script>
 {% endblock %}
