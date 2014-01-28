@@ -46,5 +46,5 @@ git log --format=tformat:"%H%n" | egrep  --color=never -o  "[a-f0-9]{40}" | whil
   echo $author
   echo $identifier
   echo $timestamp
-  curl -X POST -d "hash=$hash" -d "message=$message" -d "timestamp=$timestamp&author=$author&additions=$additions&deletions=$deletions&files_affected=$files_affected&identifier=$identifier" $URL_ROOT
+  curl -X POST -d "hash=$hash&message=$message&timestamp=$timestamp&author=$author&additions=$additions&deletions=$deletions&files_affected=$files_affected&identifier=$identifier" $URL_ROOT
 done
