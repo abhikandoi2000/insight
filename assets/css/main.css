@@ -187,3 +187,14 @@ body {
   margin-left: 1.6em;
   margin-right: 0.4em;
 }
+
+.labels .label {
+  font-family: Nunito, Arial;
+}
+
+.graphlabel {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+}

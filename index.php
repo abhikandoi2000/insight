@@ -34,14 +34,14 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
 /**
  * Landing Page
  */
-$app->get('/', function() use($app) {
+$app->get('/', function() use($app, $config) {
   $now = time();
-  $past = $now - (4 * 7 * 24 * 60 * 60);
+  $past = $now - ($config['days_projectgraph'] * 24 * 60 * 60);
 
   // top authors by commits
   $top_authors_sql = "SELECT count(*) as commit_count, `author` FROM `commits` WHERE `timestamp` BETWEEN :past AND :now GROUP BY `author` ORDER BY commit_count DESC LIMIT 5";
-  $top_authors = array();
   $commit_data = $app['db']->fetchAll($top_authors_sql, array(':past' => $past, ':now' => $now));
+  $top_authors = array();
 
   foreach( $commit_data as $key => $author ) {
     $member_sql = "SELECT `firstname`, `lastname` FROM members WHERE mail = ?";
@@ -51,11 +51,42 @@ $app->get('/', function() use($app) {
 
   // top projects by commits
   $top_projects_sql = "SELECT count(*) as commit_count, `identifier` FROM `commits` WHERE `timestamp` BETWEEN :past AND :now GROUP BY `identifier` ORDER BY commit_count DESC LIMIT 5";
-  $top_projects = array();
   $project_data = $app['db']->fetchAll($top_projects_sql, array(':past' => $past, ':now' => $now));
+  $top_projects = array();
+  $top_projects_graphdata = array();
+  $colors = array(
+    "rgba(41,128,185,0.6)",
+    "rgba(192,57,43,0.54)",
+    "rgba(26,188,156,0.52)",
+    "rgba(115,89,182,0.48)",
+    "rgba(231,76,60,0.44)",
+    "rgba(52,73,94,0.4)",
+    "rgba(44,62,80,0.64)",
+    "rgba(52,152,219,0.6)",
+    "rgba(230,126,34,0.56)",
+    "rgba(42,204,113,0.4)"
+  );
 
   foreach( $project_data as $key => $project ) {
-    array_push($top_projects, array('identifier' => $project['identifier'], 'commits' => $project['commit_count']));
+    $top_project = array(
+      'identifier' => $project['identifier'],
+      'commit_count' => $project['commit_count'],
+      'fillcolor' => $colors[$key]
+    );
+    $top_project['graph_data'] = array();
+
+    // for current day
+    $project_graphdata_sql = "SELECT DAYOFMONTH(CURDATE()) as `day`, MONTHNAME(CURDATE()) as `month`, count(*) as `commit_count` FROM `commits` WHERE `identifier` = '{$project['identifier']}' AND `timestamp` BETWEEN UNIX_TIMESTAMP(CURDATE()) AND UNIX_TIMESTAMP(CURDATE() + INTERVAL 1 DAY) GROUP BY `identifier`";
+    $project_commits = $app['db']->fetchAssoc($project_graphdata_sql);
+    array_push($top_project['graph_data'], $project_commits);
+
+    for($i = 1; $i < $config['days_projectgraph']; $i++) {
+      $oneMinus = $i-1;
+      $project_graphdata_sql = "SELECT DAYOFMONTH(CURDATE() - INTERVAL {$i} DAY) as `day`, MONTHNAME(CURDATE() - INTERVAL {$i} DAY) as `month`, count(*) as `commit_count` FROM `commits` WHERE `identifier` = '{$project['identifier']}' AND `timestamp` BETWEEN UNIX_TIMESTAMP(CURDATE() - INTERVAL {$i} DAY) AND UNIX_TIMESTAMP(CURDATE() - INTERVAL {$oneMinus} DAY) GROUP BY `identifier`";
+      $project_commits = $app['db']->fetchAssoc($project_graphdata_sql);
+      array_push($top_project['graph_data'], $project_commits);
+    }
+    array_push($top_projects, $top_project);
   }
 
   return $app['twig']->render('home.html', array('top_authors' => $top_authors, 'top_projects' => $top_projects));
