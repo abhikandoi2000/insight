@@ -15,7 +15,7 @@
 </head>
 <body>
   <div id="layout" class="content pure-g-r">
-    <div id="nav" class="pure-u">
+    <div id="nav" class="pure-u-1-6">
       <div class="nav-inner">
         <div class="pure-g profile-wrapper">
           <div id="profile" class="pure-u-1">
@@ -49,16 +49,16 @@
         </div>
       </div>
     </div>
-    <div id="main" class="pure-u">
-    <div class="main-content">
-      <div id="heading" class="menu">
-        <div id="pagetitle">Insight</div>
+    <div id="main" class="pure-u-5-6">
+      <div class="main-content">
+        <div id="heading" class="menu">
+          <div id="pagetitle">Insight</div>
+        </div>
+        <div class="content-body">
+        {% block content %}
+        {% endblock %}
+        </div>
       </div>
-      <div class="content-body">
-      {% block content %}
-      {% endblock %}
-      </div>
-    </div>
     </div>
   </div>
   <script src="/assets/js/Chart.min.js"></script>
