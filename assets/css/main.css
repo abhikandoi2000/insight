@@ -122,7 +122,7 @@ body {
 
 #heading, #profile {
   height: 6em;
-  box-shadow: 0 3px 6px -6px rgba(15,15,15,0.5);
+  box-shadow: 0 3px 6px -6px rgba(15,15,15,0.9);
   vertical-align: middle;
 }
 
@@ -152,7 +152,7 @@ body {
   height: 200px;
   margin: 1em 1em;
   background: #fff;
-  box-shadow: -1px 1px 3px 0px rgba(180,180,180,0.2);
+  box-shadow: -1px 1px 3px 0px rgba(180,180,180,0.8);
   text-align: center;
   border-radius: 2px;
   overflow: hidden;
